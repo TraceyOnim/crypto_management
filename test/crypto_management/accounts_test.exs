@@ -31,7 +31,46 @@ defmodule CryptoManagement.AccountsTest do
 
     test "hash length should be 64" do
       changeset = Accounts.change_transaction(%Transaction{}, %{hash: "0xca8b863caa"})
-      assert %{hash: ["invalid hash, should be 64 character(s)"]} = errors_on(changeset)
+      assert %{hash: ["invalid hash, should be 64-66 character(s)"]} = errors_on(changeset)
+    end
+  end
+
+  describe "create_transaction/1" do
+    test "requires hash to create a transaction" do
+      {:error, changeset} = Accounts.create_transaction(%{})
+      assert %{hash: ["Oops! tx hash is empty. Try Again"]} = errors_on(changeset)
+    end
+
+    test "creates a transaction" do
+      attrs = %{
+        "block_hash" => "0xca8b863caa24d250b5ef9733110a0dc31c63a6178eee5ff36c7f259f170eef3b",
+        "block_number" => 15_451_992,
+        "chain_id" => "0x1",
+        "from" => "0x3c16183c1c0e28f1a0cb9f8ee4b21d0db208ca46",
+        "gas" => "0x186a0",
+        "gas_price" => "0x3653e98f8",
+        "hash" => "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf",
+        "max_fee_per_gas" => "0x684ee1800",
+        "max_priority_fee_per_gas" => "0x3b9aca00",
+        "nonce" => "0xc1921",
+        "to" => "0xd27bb47fc504c75f2fa2927c1f66d5a38dfa2ca4",
+        "transaction_index" => "0x7a",
+        "type" => "0x2",
+        "value" => "0x36873023485ba00"
+      }
+
+      {:ok, %Transaction{hash: hash}} = Accounts.create_transaction(attrs) |> IO.inspect()
+      assert attrs["hash"] == hash
+    end
+  end
+
+  describe "save_transaction/1" do
+    test "save transaction for valid hash" do
+      param = %{"hash" => "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf"}
+      Accounts.save_transaction(param) |> IO.inspect()
+    end
+
+    test "returns {:error, changeset} for failed transaction process" do
     end
   end
 

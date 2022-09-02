@@ -9,7 +9,7 @@ defmodule CryptoManagement.Util do
   def parse_hex_to_decimal("0x" <> hex) do
     case Integer.parse(hex, 16) do
       {value, _} -> value
-      _ -> :error
+      :error -> 0
     end
   end
 

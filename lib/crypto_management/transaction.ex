@@ -13,7 +13,6 @@ defmodule CryptoManagement.Transaction do
     field :from, :string
     field :gas, :string
     field :gas_price, :string
-    field :input, :string
     field :max_fee_per_gas, :string
     field :max_priority_fee_per_gas, :string
     field :nonce, :string
@@ -24,7 +23,7 @@ defmodule CryptoManagement.Transaction do
     timestamps()
   end
 
-  @fields ~w(hash block_hash block_number chain_id from gas gas_price input max_fee_per_gas max_priority_fee_per_gas nonce to value status)a
+  @fields ~w(hash block_hash block_number chain_id from gas gas_price max_fee_per_gas max_priority_fee_per_gas nonce to value status)a
 
   def changeset(transaction \\ %Transaction{}, attrs \\ %{}) do
     transaction

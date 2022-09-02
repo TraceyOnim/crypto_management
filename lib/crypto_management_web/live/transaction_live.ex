@@ -34,20 +34,28 @@ defmodule CryptoManagementWeb.TransactionLive do
     # sanitize the transaction params -> done
     # fetch recent block number->done
     # convert block number from hex to decimal-> done
-    # save transaction in the db
-    # save transaction locally
-    case CryptoManagement.Accounts.change_transaction(%Transaction{}, params)
-         |> CryptoManagement.Repo.insert() do
-      {:ok, event} ->
+    # save transaction in the db->done
+    # save transaction locally -> done
+    # index transaction
+    # show
+    # schedule job to update
+    case CryptoManagement.Accounts.save_transaction(params) do
+      {:ok, _transaction} ->
         {
           :noreply,
           socket
           |> put_flash(:info, "Transaction created successfully")
-          |> push_redirect(to: "/")
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
+
+      {:error, message} ->
+        {
+          :noreply,
+          socket
+          |> put_flash(:error, message)
+        }
     end
   end
 end

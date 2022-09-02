@@ -15,6 +15,7 @@ defmodule CryptoManagement.TransactionCache do
       :ok -> :ok
       _ -> :error
     end
+    |> IO.inspect(label: "========insert==================")
   end
 
   def confirmed_transactions(recent_block_number) do
@@ -27,10 +28,14 @@ defmodule CryptoManagement.TransactionCache do
     end)
   end
 
-  def delete_transaction(confirmed_transactions) do
-    unless Enum.empty?(confirmed_transactions) do
-      Enum.each(confirmed_transactions, fn key -> delete(key) end)
+  def delete_transaction(value) when is_list(value) do
+    unless Enum.empty?(value) do
+      Enum.each(value, fn key -> delete_transaction(key) end)
     end
+  end
+
+  def delete_transaction(value) do
+    delete(value)
   end
 
   defp new_transaction(transaction) do

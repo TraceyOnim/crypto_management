@@ -10,7 +10,6 @@ defmodule CryptoManagement.Repo.Migrations.CreateEthTransactionTable do
       add :from, :string
       add :gas, :string
       add :gas_price, :string
-      add :input, :string
       add :max_fee_per_gas, :string
       add :max_priority_fee_per_gas, :string
       add :nonce, :string

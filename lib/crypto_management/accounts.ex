@@ -4,9 +4,29 @@ defmodule CryptoManagement.Accounts do
   """
   alias CryptoManagement.Client
   alias CryptoManagement.Transaction
+  alias CryptoManagement.TransactionCache
   alias CryptoManagement.Util
+  alias CryptoManagement.Repo
 
   @http_client Application.get_env(:crypto_management, :http_client, Client)
+
+  def save_transaction(%{"hash" => hash} = attrs) do
+    with %Ecto.Changeset{valid?: true} <- change_transaction(%Transaction{}, attrs),
+         {:ok, transaction} <- get_eth_transaction(hash),
+         :ok <- TransactionCache.insert_transaction(transaction),
+         {:ok, transaction} <- create_transaction(transaction) do
+      {:ok, transaction}
+    else
+      %Ecto.Changeset{valid?: false} = changeset ->
+        Ecto.Changeset.apply_action(changeset, :insert)
+
+      {:error, changeset} ->
+        {:error, changeset}
+
+      _ ->
+        {:error, "Something went wrong, Try Again!!!"}
+    end
+  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking transaction changes.
@@ -15,6 +35,23 @@ defmodule CryptoManagement.Accounts do
   @spec change_transaction(%Transaction{}, map()) :: %Ecto.Changeset{}
   def change_transaction(transaction, attrs \\ %{}) do
     Transaction.changeset(transaction, attrs)
+  end
+
+  @doc """
+  inserts a transaction into the database
+  """
+  @spec create_transaction(map()) :: {:ok, %Transaction{}} | {:error, %Ecto.Changeset{}}
+  def create_transaction(params) do
+    params = new_param(params)
+
+    %Transaction{}
+    |> change_transaction(params)
+    |> Repo.insert()
+  end
+
+  defp new_param(params) do
+    params = Util.sanitize_keys(params)
+    Map.put(params, "block_number", Util.parse_hex_to_decimal(params["block_number"]))
   end
 
   @doc """
@@ -39,10 +76,7 @@ defmodule CryptoManagement.Accounts do
   end
 
   defp parse_hex_to_decimal({:ok, result}) do
-    case Util.parse_hex_to_decimal(result) do
-      :error -> 0
-      value -> value
-    end
+    Util.parse_hex_to_decimal(result)
   end
 
   defp parse_hex_to_decimal(_), do: 0
