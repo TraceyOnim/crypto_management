@@ -51,7 +51,8 @@ defmodule CryptoManagement.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 1.8"},
       {:poison, "~> 5.0"},
-      {:mox, "~> 1.0", only: :test}
+      {:mox, "~> 1.0", only: :test},
+      {:nebulex, "~> 2.4"}
     ]
   end
 

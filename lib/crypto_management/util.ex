@@ -1,4 +1,7 @@
 defmodule CryptoManagement.Util do
+  @moduledoc """
+  Helper module
+  """
   # For compatibility with Parity, please prefix all hex strings with " 0x "
   def prefix_hex("0x" <> _hex = value), do: value
   def prefix_hex(value), do: "0x" <> value

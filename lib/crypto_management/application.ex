@@ -8,6 +8,7 @@ defmodule CryptoManagement.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      Transaction.Cache,
       # Start the Ecto repository
       CryptoManagement.Repo,
       # Start the Telemetry supervisor
