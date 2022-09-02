@@ -17,7 +17,8 @@ defmodule CryptoManagementWeb.Router do
   scope "/", CryptoManagementWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
+    live "/", TransactionLive
   end
 
   # Other scopes may use custom stacks.

@@ -4,7 +4,7 @@ defmodule CryptoManagement.Transaction do
 
   alias __MODULE__
 
-  @primary_key {:hash, :binary_id, autogenerate: false}
+  @primary_key {:hash, :string, autogenerate: false}
 
   schema "transactions" do
     field :block_hash, :string
@@ -29,6 +29,11 @@ defmodule CryptoManagement.Transaction do
   def changeset(transaction \\ %Transaction{}, attrs \\ %{}) do
     transaction
     |> cast(attrs, @fields)
-    |> validate_required([:hash])
+    |> validate_required([:hash], message: "Oops! tx hash is empty. Try Again")
+    |> validate_length(:hash, is: 64, message: "invalid hash, should be 64 character(s)")
+    |> unique_constraint(:hash,
+      name: :transactions_pkey,
+      message: "Transaction with the given hash already exist"
+    )
   end
 end

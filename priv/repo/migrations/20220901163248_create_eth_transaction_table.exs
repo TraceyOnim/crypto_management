@@ -3,7 +3,7 @@ defmodule CryptoManagement.Repo.Migrations.CreateEthTransactionTable do
 
   def change do
    create table(:transactions, primary_key: false) do
-      add :hash, :binary_id, primary_key: true
+      add :hash, :string, primary_key: true
       add :block_hash, :string
       add :block_number, :string
       add :chain_id, :string
