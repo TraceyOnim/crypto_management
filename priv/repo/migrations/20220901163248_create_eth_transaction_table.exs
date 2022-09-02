@@ -5,7 +5,7 @@ defmodule CryptoManagement.Repo.Migrations.CreateEthTransactionTable do
    create table(:transactions, primary_key: false) do
       add :hash, :string, primary_key: true
       add :block_hash, :string
-      add :block_number, :string
+      add :block_number, :integer
       add :chain_id, :string
       add :from, :string
       add :gas, :string

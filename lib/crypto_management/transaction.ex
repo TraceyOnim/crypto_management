@@ -8,7 +8,7 @@ defmodule CryptoManagement.Transaction do
 
   schema "transactions" do
     field :block_hash, :string
-    field :block_number, :string
+    field :block_number, :integer
     field :chain_id, :string
     field :from, :string
     field :gas, :string
@@ -30,7 +30,11 @@ defmodule CryptoManagement.Transaction do
     transaction
     |> cast(attrs, @fields)
     |> validate_required([:hash], message: "Oops! tx hash is empty. Try Again")
-    |> validate_length(:hash, is: 64, message: "invalid hash, should be 64 character(s)")
+    |> validate_length(:hash,
+      min: 64,
+      max: 66,
+      message: "invalid hash, should be 64-66 character(s)"
+    )
     |> unique_constraint(:hash,
       name: :transactions_pkey,
       message: "Transaction with the given hash already exist"
