@@ -24,7 +24,7 @@ defmodule CryptoManagement.Accounts do
         {:error, changeset}
 
       _ ->
-        {:error, "Something went wrong, Try Again!!!"}
+        {:error, "Something went wrong, confirm the hash entered and Try Again!!!"}
     end
   end
 
@@ -47,11 +47,6 @@ defmodule CryptoManagement.Accounts do
     %Transaction{}
     |> change_transaction(params)
     |> Repo.insert()
-  end
-
-  defp new_param(params) do
-    params = Util.sanitize_keys(params)
-    Map.put(params, "block_number", Util.parse_hex_to_decimal(params["block_number"]))
   end
 
   @doc """
@@ -80,6 +75,11 @@ defmodule CryptoManagement.Accounts do
   end
 
   defp parse_hex_to_decimal(_), do: 0
+
+  defp new_param(params) do
+    params = Util.sanitize_keys(params)
+    Map.put(params, "block_number", Util.parse_hex_to_decimal(params["block_number"]))
+  end
 
   defp handle_response({:ok, %HTTPoison.Response{body: body, status_code: status_code}})
        when status_code in 200..399 do
