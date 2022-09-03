@@ -83,8 +83,15 @@ defmodule CryptoManagementWeb.TransactionLiveTest do
 
       param = %{"hash" => "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf"}
 
-      assert render_submit(view, :submit, %{"transaction" => param}) =~
-               "Transaction created successfully"
+      html = render_submit(view, :submit, %{"transaction" => param})
+
+      {:ok, res} = response
+      {:ok, %{"result" => result}} = Poison.decode(res.body)
+
+      block_number = CryptoManagement.Util.parse_hex_to_decimal(result["blockNumber"])
+
+      assert html =~ "Transaction created successfully"
+      assert html =~ "#{block_number}"
     end
 
     test "hash given is validated", %{view: view} do

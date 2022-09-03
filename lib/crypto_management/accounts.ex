@@ -70,6 +70,22 @@ defmodule CryptoManagement.Accounts do
     |> parse_hex_to_decimal()
   end
 
+  @doc """
+  Fetches all transaction from db
+  """
+  @spec all_transactions() :: [%Transaction{}, ...]
+  def all_transactions do
+    Repo.all(Transaction)
+  end
+
+  @doc """
+  Returns transaction of the given hash from database
+  """
+  @spec get_transaction(String.t()) :: %Transaction{}
+  def get_transaction(hash) do
+    Repo.get(Transaction, hash)
+  end
+
   defp parse_hex_to_decimal({:ok, result}) do
     Util.parse_hex_to_decimal(result)
   end
