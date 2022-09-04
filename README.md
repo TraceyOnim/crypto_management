@@ -26,7 +26,8 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 When a user visit the page `http://localhost:4000` they will see a form where they can enter a transaction hash:
 
-![form](update image)
+![image](https://user-images.githubusercontent.com/43263401/188310332-008655a2-da99-479a-99a9-6f9e94072b46.png)
+
 
 Once they submit the transaction hash, their request is sent to the server and the following process will take place:
  
@@ -60,10 +61,11 @@ Once the above processes(validation, fetching from etherscan , caching locally) 
 
 The user will see a confirmation message `Transaction created successfully` and also the transaction details displayed.
 
- ![form](update image)
+ ![image](https://user-images.githubusercontent.com/43263401/188310538-6ac7949d-5a9f-42cf-9aeb-81a4c933d6e3.png)
+
 
  5. Scheduler
- The scheduler server is responsible for updating confirmed transactions(pending transactions whose block confirmation number is >= 2) status to `complete` after every `10 seconds`.
+ The scheduler server is responsible for updating confirmed transactions(pending transactions whose block confirmation number is >= 2) status to `complete` after every `20 seconds`.
 
  6. Broadcast updates
 After the pending transactions have been updated, updates are broadcasted to provide live update of the current status.
