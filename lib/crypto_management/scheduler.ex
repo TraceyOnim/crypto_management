@@ -36,11 +36,21 @@ defmodule CryptoManagement.Scheduler do
     Process.send_after(self(), :update, 10000)
   end
 
-  defp update_pending_transactions do
-    confirmed_transactions =
-      Accounts.recent_block_number() |> TransactionCache.confirmed_transactions()
+  defp confirmed_transactions(recent_block_number, cached_transactions) do
+    Enum.filter(cached_transactions, fn key ->
+      transaction = Transaction.Cache.get(key)
+      confirmed_blocks = recent_block_number - transaction.block_number
+      confirmed_blocks >= 2
+    end)
+  end
 
-    unless Enum.empty?(confirmed_transactions) do
+  defp update_pending_transactions do
+    all_cached_transactions = TransactionCache.all_cached_transactions()
+
+    unless Enum.empty?(all_cached_transactions) do
+      confirmed_transactions =
+        Accounts.recent_block_number() |> confirmed_transactions(all_cached_transactions)
+
       Accounts.update_pending_transactions(confirmed_transactions)
       # broadcast updated transactions
       PubSub.broadcast(

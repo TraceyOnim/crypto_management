@@ -2,7 +2,7 @@ defmodule CryptoManagement.TransactionCache do
   @moduledoc """
   context for manipulating cache entries. It involves;
    - Inserting a pending transaction into the cache
-   - Fetching transaction whose block confirmation is `>=2` 
+   - Fetching cached transaction  
    - Deleting confirmed transaction from the cache 
   """
   alias CryptoManagement.Accounts
@@ -21,14 +21,8 @@ defmodule CryptoManagement.TransactionCache do
     |> Cache.put_all()
   end
 
-  def confirmed_transactions(recent_block_number) do
-    cached_transactions_keys = Cache.all()
-
-    Enum.filter(cached_transactions_keys, fn key ->
-      transaction = Cache.get(key)
-      confirmed_blocks = recent_block_number - transaction.block_number
-      confirmed_blocks >= 2
-    end)
+  def all_cached_transactions do
+    Cache.all()
   end
 
   def delete_transaction(value) when is_list(value) do
