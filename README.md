@@ -39,7 +39,7 @@ The transaction hash submitted will be validated to check if;
   - It is has a required length of minimum 64 and maximum 66.
      ```
      Example:
-     valid hash with 0x prefix 7e2ac449ee8cc92362ca887633af7177699a98153f78033e4b572ee3ae485ec5 has a length of 64 with the 0x prefix its length 66
+     valid hash with 0x prefix 7e2ac449ee8cc92362ca887633af7177699a98153f78033e4b572ee3ae485ec5 has a length of 66 without the 0x prefix its length 66
 
      ```
 
@@ -70,14 +70,14 @@ The user will see a confirmation message `Transaction created successfully` and 
  ![image](https://user-images.githubusercontent.com/43263401/188310538-6ac7949d-5a9f-42cf-9aeb-81a4c933d6e3.png)
 
 
-#### 5. Scheduler
+#### 5. Schedule to update confirmed transaction
 
 
- The scheduler server is responsible for updating confirmed transactions(pending transactions whose block confirmation number is >= 2) status to `complete` after every `20 seconds`.
+ The scheduler server will be responsible for updating confirmed transactions(cached pending transactions whose block confirmation number is >= 2) status to `complete` after every `20 seconds`.
 
  #### 6. Broadcast updates
 
- 
+
 After the pending transactions have been updated, updates are broadcasted to provide live update of the current status.
 
 
