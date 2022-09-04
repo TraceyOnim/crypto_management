@@ -86,15 +86,6 @@ defmodule CryptoManagementWeb.TransactionLive do
 
   @impl true
   def handle_event("submit", %{"transaction" => params}, socket) do
-    # fetch the transaction->done
-    # sanitize the transaction params -> done
-    # fetch recent block number->done
-    # convert block number from hex to decimal-> done
-    # save transaction in the db->done
-    # save transaction locally -> done
-    # index transaction -> done
-    # show -> done
-    # schedule job to update
     case CryptoManagement.Accounts.save_transaction(params) do
       {:ok, transaction} ->
         {
