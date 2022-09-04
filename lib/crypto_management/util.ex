@@ -1,6 +1,6 @@
 defmodule CryptoManagement.Util do
   @moduledoc """
-  Helper module
+  Helper module that contains functions that are reusable across the project
   """
   # For compatibility with Parity, please prefix all hex strings with " 0x "
   def prefix_hex("0x" <> _hex = value), do: value

@@ -5,11 +5,20 @@ defmodule CryptoManagement.TransactionCache do
    - Fetching transaction whose block confirmation is `>=2` 
    - Deleting confirmed transaction from the cache 
   """
+  alias CryptoManagement.Accounts
   alias Transaction.Cache
   alias CryptoManagement.Util
 
   def insert_transaction(transaction) do
     Cache.put(transaction["hash"], new_transaction(transaction))
+  end
+
+  def insert_all_transaction(pending_transactions) do
+    pending_transactions
+    |> Enum.map(fn transaction ->
+      {transaction.hash, %{id: transaction.hash, block_number: transaction.block_number}}
+    end)
+    |> Cache.put_all()
   end
 
   def confirmed_transactions(recent_block_number) do

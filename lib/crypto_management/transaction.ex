@@ -1,6 +1,7 @@
 defmodule CryptoManagement.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   alias __MODULE__
 
@@ -38,5 +39,19 @@ defmodule CryptoManagement.Transaction do
       name: :transactions_pkey,
       message: "Transaction with the given hash already exist"
     )
+  end
+
+  @doc """
+  Queries for all transactions that are pending
+  """
+  def pending_transactions_query do
+    from t in __MODULE__,
+      where: t.status == "pending"
+  end
+
+  def update_pending_transactions_query(confirmed_transactions) do
+    from t in __MODULE__,
+      where: t.status == "pending" and t.hash in ^confirmed_transactions,
+      update: [set: [status: "complete"]]
   end
 end

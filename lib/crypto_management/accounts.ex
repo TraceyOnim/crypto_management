@@ -79,6 +79,24 @@ defmodule CryptoManagement.Accounts do
   end
 
   @doc """
+  fetches all pending transaction from the database
+  """
+  @spec all_pending_transactions() :: [%Transaction{}, ...]
+  def all_pending_transactions do
+    Transaction.pending_transactions_query() |> Repo.all()
+  end
+
+  @doc """
+  updates all pending transactions
+  """
+  @spec update_pending_transactions([String.t(), ...]) :: {non_neg_integer(), nil | [term()]}
+  def update_pending_transactions(confirmed_transactions) do
+    confirmed_transactions
+    |> Transaction.update_pending_transactions_query()
+    |> Repo.update_all([])
+  end
+
+  @doc """
   Returns transaction of the given hash from database
   """
   @spec get_transaction(String.t()) :: %Transaction{}
@@ -92,10 +110,12 @@ defmodule CryptoManagement.Accounts do
 
   defp parse_hex_to_decimal(_), do: 0
 
-  defp new_param(params) do
+  defp new_param(%{"hash" => _hash} = params) do
     params = Util.sanitize_keys(params)
     Map.put(params, "block_number", Util.parse_hex_to_decimal(params["block_number"]))
   end
+
+  defp new_param(params), do: params
 
   defp handle_response({:ok, %HTTPoison.Response{body: body, status_code: status_code}})
        when status_code in 200..399 do

@@ -1,10 +1,13 @@
 defmodule CryptoManagementWeb.TransactionLive do
   use CryptoManagementWeb, :live_view
 
+  alias Phoenix.PubSub
   alias Phoenix.LiveView.JS
   alias CryptoManagement.{Accounts, Transaction}
 
   def mount(_params, _session, socket) do
+    PubSub.subscribe(CryptoManagement.PubSub, "updated_transactions")
+
     {:ok,
      assign(socket,
        modal: false,
@@ -116,6 +119,20 @@ defmodule CryptoManagementWeb.TransactionLive do
   @impl true
   def handle_event("more", %{"hash" => hash}, socket) do
     {:noreply, assign(socket, modal: true, transaction: Accounts.get_transaction(hash))}
+  end
+
+  @impl true
+  def handle_info({:updated_transactions, confirmed_transactions}, socket) do
+    transactions =
+      Enum.map(socket.assigns.transactions, fn transaction ->
+        if transaction.hash in confirmed_transactions do
+          Map.put(transaction, :status, "complete")
+        else
+          transaction
+        end
+      end)
+
+    {:noreply, assign(socket, transactions: transactions)}
   end
 
   defp modal(assigns) do

@@ -92,6 +92,7 @@ defmodule CryptoManagementWeb.TransactionLiveTest do
 
       assert html =~ "Transaction created successfully"
       assert html =~ "#{block_number}"
+      assert html =~ "pending"
     end
 
     test "hash given is validated", %{view: view} do

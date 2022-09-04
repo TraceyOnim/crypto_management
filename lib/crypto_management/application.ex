@@ -16,9 +16,10 @@ defmodule CryptoManagement.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: CryptoManagement.PubSub},
       # Start the Endpoint (http/https)
-      CryptoManagementWeb.Endpoint
+      CryptoManagementWeb.Endpoint,
       # Start a worker by calling: CryptoManagement.Worker.start_link(arg)
       # {CryptoManagement.Worker, arg}
+      CryptoManagement.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
