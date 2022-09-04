@@ -33,7 +33,7 @@ defmodule CryptoManagement.Scheduler do
   end
 
   defp schedule_work do
-    Process.send_after(self(), :update, 10000)
+    Process.send_after(self(), :update, 20000)
   end
 
   defp confirmed_transactions(recent_block_number, cached_transactions) do
