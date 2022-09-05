@@ -8,7 +8,7 @@ To test the application in the development environment;
  - The application will fetch the `API KEY` generated from the system therefore, create an `.env` file at the root of the application and add the following
 
   ```
-  export  EtherScan_API_KEY=<replace this with your api>
+  export ETHERSCAN_API_KEY=<replace this with your api>
   ```
   then run the command `source .env` on the terminal to export the `key` in the system environment.
 
