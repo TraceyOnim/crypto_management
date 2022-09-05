@@ -1,4 +1,4 @@
-defmodule CryptoManagement.Transaction do
+defmodule CryptoManagement.Transactions.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query

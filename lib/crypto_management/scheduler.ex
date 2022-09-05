@@ -3,8 +3,8 @@ defmodule CryptoManagement.Scheduler do
 
   require Logger
 
-  alias CryptoManagement.Accounts
-  alias CryptoManagement.TransactionCache
+  alias CryptoManagement.Transactions
+  alias CryptoManagement.Transactions.TransactionCache
   alias alias Phoenix.PubSub
 
   # client
@@ -18,7 +18,7 @@ defmodule CryptoManagement.Scheduler do
 
   def init(opts) do
     # cache all pending transaction 
-    insert_all_transaction()
+    insert_all_transaction() |> IO.inspect(label: "----------------------")
     schedule_work()
 
     {:ok, opts}
@@ -26,7 +26,7 @@ defmodule CryptoManagement.Scheduler do
 
   @impl true
   def handle_info(:update, state) do
-    update_pending_transactions()
+    update_pending_transactions() |> IO.inspect(label: "}}}}}}}}}}}}}]")
     schedule_work()
 
     {:noreply, state}
@@ -49,9 +49,9 @@ defmodule CryptoManagement.Scheduler do
 
     unless Enum.empty?(all_cached_transactions) do
       confirmed_transactions =
-        Accounts.recent_block_number() |> confirmed_transactions(all_cached_transactions)
+        Transactions.recent_block_number() |> confirmed_transactions(all_cached_transactions)
 
-      Accounts.update_pending_transactions(confirmed_transactions)
+      Transactions.update_pending_transactions(confirmed_transactions)
       # broadcast updated transactions
       PubSub.broadcast(
         CryptoManagement.PubSub,
@@ -67,7 +67,7 @@ defmodule CryptoManagement.Scheduler do
   end
 
   defp insert_all_transaction do
-    pending_transactions = Accounts.all_pending_transactions()
+    pending_transactions = Transactions.all_pending_transactions()
 
     unless Enum.empty?(pending_transactions) do
       TransactionCache.insert_all_transaction(pending_transactions)

@@ -1,11 +1,13 @@
-defmodule CryptoManagement.AccountsTest do
+defmodule CryptoManagement.TransactionsTest do
   use CryptoManagement.DataCase
 
-  alias CryptoManagement.{Accounts, Transaction}
+  alias CryptoManagement.Transactions
+
+  alias CryptoManagement.Transactions.Transaction
 
   describe "change_transaction/2" do
     test "returns a changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_transaction(%Transaction{})
+      assert %Ecto.Changeset{} = changeset = Transactions.change_transaction(%Transaction{})
 
       assert changeset.required == [:hash]
     end
@@ -16,7 +18,7 @@ defmodule CryptoManagement.AccountsTest do
         "block_number" => 965_749
       }
 
-      changeset = Accounts.change_transaction(%Transaction{}, attrs)
+      changeset = Transactions.change_transaction(%Transaction{}, attrs)
 
       assert changeset.valid?
       assert get_change(changeset, :hash) == attrs["hash"]
@@ -24,20 +26,20 @@ defmodule CryptoManagement.AccountsTest do
     end
 
     test "requires hash to change" do
-      changeset = Accounts.change_transaction(%Transaction{})
+      changeset = Transactions.change_transaction(%Transaction{})
 
       assert %{hash: ["Oops! tx hash is empty. Try Again"]} = errors_on(changeset)
     end
 
     test "hash length should be 64" do
-      changeset = Accounts.change_transaction(%Transaction{}, %{hash: "0xca8b863caa"})
+      changeset = Transactions.change_transaction(%Transaction{}, %{hash: "0xca8b863caa"})
       assert %{hash: ["invalid hash, should be 64-66 character(s)"]} = errors_on(changeset)
     end
   end
 
   describe "create_transaction/1" do
     test "requires hash to create a transaction" do
-      {:error, changeset} = Accounts.create_transaction(%{})
+      {:error, changeset} = Transactions.create_transaction(%{})
       assert %{hash: ["Oops! tx hash is empty. Try Again"]} = errors_on(changeset)
     end
 
@@ -64,7 +66,7 @@ defmodule CryptoManagement.AccountsTest do
         "value" => "0x36873023485ba00"
       }
 
-      {:ok, %Transaction{hash: hash}} = Accounts.create_transaction(attrs)
+      {:ok, %Transaction{hash: hash}} = Transactions.create_transaction(attrs)
       assert attrs["hash"] == hash
     end
   end
@@ -142,13 +144,13 @@ defmodule CryptoManagement.AccountsTest do
       end)
 
       param = %{"hash" => "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf"}
-      {:ok, %Transaction{hash: hash}} = Accounts.save_transaction(param)
+      {:ok, %Transaction{hash: hash}} = Transactions.save_transaction(param)
       assert hash == param["hash"]
     end
 
     test "validates the hash given" do
       param = %{"hash" => "0x0d4ae469b46e663"}
-      {:error, changeset} = Accounts.save_transaction(param)
+      {:error, changeset} = Transactions.save_transaction(param)
       assert %{hash: ["invalid hash, should be 64-66 character(s)"]} = errors_on(changeset)
     end
 
@@ -160,7 +162,7 @@ defmodule CryptoManagement.AccountsTest do
       param = %{"hash" => "12c70712d0a7e0c0faa59cc023b5ce532c008a17c942db32a53da435ea7e7613c9"}
 
       assert {:error, "Something went wrong, confirm the hash entered and Try Again!!!"} =
-               Accounts.save_transaction(param)
+               Transactions.save_transaction(param)
     end
   end
 
@@ -206,11 +208,11 @@ defmodule CryptoManagement.AccountsTest do
       end)
 
       param = %{"hash" => "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf"}
-      {:ok, %Transaction{status: "pending"}} = Accounts.save_transaction(param)
+      {:ok, %Transaction{status: "pending"}} = Transactions.save_transaction(param)
 
-      {1, nil} = Accounts.update_pending_transactions([param["hash"]])
+      {1, nil} = Transactions.update_pending_transactions([param["hash"]])
 
-      assert %Transaction{status: "complete"} = Accounts.get_transaction(param["hash"])
+      assert %Transaction{status: "complete"} = Transactions.get_transaction(param["hash"])
     end
   end
 
@@ -288,7 +290,7 @@ defmodule CryptoManagement.AccountsTest do
 
       hash = "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf"
 
-      {:ok, result} = Accounts.get_eth_transaction(hash)
+      {:ok, result} = Transactions.get_eth_transaction(hash)
 
       assert result["hash"] == hash
     end
@@ -300,7 +302,7 @@ defmodule CryptoManagement.AccountsTest do
 
       hash = "0x0d4ae469b46e663"
 
-      assert Accounts.get_eth_transaction(hash) == :error
+      assert Transactions.get_eth_transaction(hash) == :error
     end
   end
 
@@ -345,7 +347,7 @@ defmodule CryptoManagement.AccountsTest do
       end)
 
       {:ok, res} = response
-      block_number = Accounts.recent_block_number()
+      block_number = Transactions.recent_block_number()
       {:ok, %{"result" => result}} = Poison.decode(res.body)
       assert convert_decimal_to_hex(block_number) == result
     end
@@ -393,8 +395,8 @@ defmodule CryptoManagement.AccountsTest do
       end)
 
       param = %{"hash" => "0x0d4ae469b46e663146dbe886af965e9f672cacfb75052e0b994a2fad5b4f4bdf"}
-      Accounts.save_transaction(param)
-      [%Transaction{hash: hash} | _] = Accounts.all_transactions()
+      Transactions.save_transaction(param)
+      [%Transaction{hash: hash} | _] = Transactions.all_transactions()
 
       assert hash == param["hash"]
     end

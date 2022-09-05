@@ -28,7 +28,7 @@ defmodule CryptoManagement.Client do
     "#{@base_url}?module=proxy&action=#{action}&apikey=#{@api_key}"
   end
 
-  defp url(_) do
+  defp url(_action, _options) do
     @base_url
   end
 end

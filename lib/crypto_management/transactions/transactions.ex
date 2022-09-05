@@ -1,10 +1,10 @@
-defmodule CryptoManagement.Accounts do
+defmodule CryptoManagement.Transactions do
   @moduledoc """
   This module will be responsible for manipulating transaction data
   """
   alias CryptoManagement.Client
-  alias CryptoManagement.Transaction
-  alias CryptoManagement.TransactionCache
+  alias CryptoManagement.Transactions.Transaction
+  alias CryptoManagement.Transactions.TransactionCache
   alias CryptoManagement.Util
   alias CryptoManagement.Repo
 

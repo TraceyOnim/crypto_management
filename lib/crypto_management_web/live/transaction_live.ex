@@ -3,19 +3,23 @@ defmodule CryptoManagementWeb.TransactionLive do
 
   alias Phoenix.PubSub
   alias Phoenix.LiveView.JS
-  alias CryptoManagement.{Accounts, Transaction}
 
+  alias CryptoManagement.Transactions
+  alias CryptoManagement.Transactions.Transaction
+
+  @impl true
   def mount(_params, _session, socket) do
     PubSub.subscribe(CryptoManagement.PubSub, "updated_transactions")
 
     {:ok,
      assign(socket,
        modal: false,
-       transactions: Accounts.all_transactions(),
-       changeset: Accounts.change_transaction(%Transaction{})
+       transactions: Transactions.all_transactions(),
+       changeset: Transactions.change_transaction(%Transaction{})
      )}
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
       <.form let={f} for={@changeset} phx-change="validate" phx-submit="submit" >
@@ -78,7 +82,7 @@ defmodule CryptoManagementWeb.TransactionLive do
   def handle_event("validate", %{"transaction" => params}, socket) do
     changeset =
       %Transaction{}
-      |> Accounts.change_transaction(params)
+      |> Transactions.change_transaction(params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, changeset: changeset)}
@@ -86,7 +90,7 @@ defmodule CryptoManagementWeb.TransactionLive do
 
   @impl true
   def handle_event("submit", %{"transaction" => params}, socket) do
-    case CryptoManagement.Accounts.save_transaction(params) do
+    case Transactions.save_transaction(params) do
       {:ok, transaction} ->
         {
           :noreply,
@@ -109,7 +113,7 @@ defmodule CryptoManagementWeb.TransactionLive do
 
   @impl true
   def handle_event("more", %{"hash" => hash}, socket) do
-    {:noreply, assign(socket, modal: true, transaction: Accounts.get_transaction(hash))}
+    {:noreply, assign(socket, modal: true, transaction: Transactions.get_transaction(hash))}
   end
 
   @impl true

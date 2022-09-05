@@ -1,13 +1,12 @@
-defmodule CryptoManagement.TransactionCache do
+defmodule CryptoManagement.Transactions.TransactionCache do
   @moduledoc """
   context for manipulating cache entries. It involves;
    - Inserting a pending transaction into the cache
    - Fetching cached transaction  
    - Deleting confirmed transaction from the cache 
   """
-  alias CryptoManagement.Accounts
-  alias Transaction.Cache
   alias CryptoManagement.Util
+  alias Transaction.Cache
 
   def insert_transaction(transaction) do
     Cache.put(transaction["hash"], new_transaction(transaction))
