@@ -22,7 +22,7 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-## Implementation Overview.
+## How CryptoManagement Application works
 
 When a user visit the page `http://localhost:4000` they will see a form where they can enter a transaction hash:
 
@@ -44,6 +44,7 @@ The transaction hash submitted will be validated to check if;
      ```
 
   - its not an empty hash 
+  
 Incase any of the criteria is not met, the user shall be notified.
 
 #### 2. Send request to Etherscan
@@ -81,6 +82,9 @@ The user will see a confirmation message `Transaction created successfully` and 
 After the pending transactions have been updated, updates are broadcasted to provide live update of the current status.
 
 
+![Peek 2022-09-04 14-36](https://user-images.githubusercontent.com/43263401/188311413-cac53a6f-7419-4a2b-9875-cc2e816c09cc.gif)
+
+
 
 ## Dependencies Added
 -  `HTTPoison` http client for Elixir to issue http request
@@ -115,3 +119,8 @@ After the pending transactions have been updated, updates are broadcasted to pro
    def deps do
       {:nebulex, "~> 2.4"}
    end
+   
+   
+   
+   
+   
