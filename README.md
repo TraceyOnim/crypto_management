@@ -64,7 +64,7 @@ The transaction is cached locally to be used when scheduling job that involves u
 #### 4. Persist to database
 
 
-Once the above processes(validation, fetching from etherscan , caching locally) are successful meaning the is no error returned, the transaction is persisted into the database on the `transactions table`.
+Once the above processes(validation, fetching from etherscan , caching locally) are successful meaning there is no error returned, the transaction is persisted into the database on the `transactions table`.
 
 The user will see a confirmation message `Transaction created successfully` and also the transaction details displayed.
 
@@ -83,6 +83,9 @@ After the pending transactions have been updated, updates are broadcasted to pro
 
 
 ![Peek 2022-09-04 14-36](https://user-images.githubusercontent.com/43263401/188311413-cac53a6f-7419-4a2b-9875-cc2e816c09cc.gif)
+
+
+The GIF shows a user submitting a tx hash. The transaction fetched is displayed at the end of the table. After 20second you will see its status changing to `complete`
 
 
 
