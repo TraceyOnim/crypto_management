@@ -85,7 +85,7 @@ After the pending transactions have been updated, updates are broadcasted to pro
 ![Peek 2022-09-04 14-36](https://user-images.githubusercontent.com/43263401/188311413-cac53a6f-7419-4a2b-9875-cc2e816c09cc.gif)
 
 
-The GIF shows a user submitting a tx hash. The transaction fetched is displayed at the end of the table. After 20second you will see its status changing to `complete`
+The GIF shows a user submitting a transaction hash. The transaction fetched is displayed at the end of the table. After 20second you will see its status changing to `complete`
 
 
 
