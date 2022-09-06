@@ -18,7 +18,7 @@ defmodule CryptoManagement.Scheduler do
 
   def init(opts) do
     # cache all pending transaction 
-    insert_all_transaction() |> IO.inspect(label: "----------------------")
+    insert_all_transaction()
     schedule_work()
 
     {:ok, opts}
@@ -26,7 +26,7 @@ defmodule CryptoManagement.Scheduler do
 
   @impl true
   def handle_info(:update, state) do
-    update_pending_transactions() |> IO.inspect(label: "}}}}}}}}}}}}}]")
+    update_pending_transactions()
     schedule_work()
 
     {:noreply, state}
